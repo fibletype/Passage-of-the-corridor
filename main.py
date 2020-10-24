@@ -3,4 +3,5 @@ class robot:
         self.x = x
         self.y = y
         self.v = 0
+        self.wait = 0
         self.currentStatus = -1
