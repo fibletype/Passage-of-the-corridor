@@ -3,6 +3,7 @@
 n = number of robots
 width = width of corridor
 """
+import pygame as pg
 
 class Robot:
     def __init__(self, x: float, y: float):
@@ -21,5 +22,7 @@ if __name__ == "__main__":
     n = 150
     x = 100
     width = 1000
-    robotsBuf = [Robot(x, i * width / (n + 2)) for i in range(n)]
-    print(*robotsBuf, sep="\n")
+    robotsBuf = [Robot(x, (i + 1) * width / (n + 2)) for i in range(n)]
+    pg.init()
+    pg.display.set_mode((400, 600))
+    '''print(*robotsBuf, sep="\n")'''
