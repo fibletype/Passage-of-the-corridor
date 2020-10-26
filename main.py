@@ -5,6 +5,8 @@ width = width of corridor
 """
 import pygame as pg
 
+FPS = 60
+
 class Robot:
     def __init__(self, x: float, y: float):
         self.x = x
@@ -19,10 +21,24 @@ class Robot:
 
             
 if __name__ == "__main__":
-    n = 150
-    x = 100
-    width = 1000
-    robotsBuf = [Robot(x, (i + 1) * width / (n + 2)) for i in range(n)]
+    n = 100
+    y = 100
+    width = 1350
+    BLUE = (0, 0, 255)
+    GREEN = (0, 255, 0)
+    robotsBuf = [Robot(35 + int((i) * width / (n + 2)), y) for i in range(n)]
     pg.init()
-    pg.display.set_mode((400, 600))
+    SURFACE = pg.display.set_mode((1400, 500))
     '''print(*robotsBuf, sep="\n")'''
+    play = True
+    while play:
+        SURFACE.fill((255, 255, 255))
+        for event in pg.event.get():
+            if event.type == pg.QUIT: play = False
+        
+
+        pg.display.set_caption("Test drawing")
+        for i in range(n):
+            pg.draw.circle(SURFACE, BLUE, (robotsBuf[i].x, robotsBuf[i].y), 2, 1)
+        pg.time.wait(FPS)
+        pg.display.update()
