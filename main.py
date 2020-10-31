@@ -22,7 +22,7 @@ class Robot:
         return f"robot: x={self.x}, y={self.y}, v={self.v}, " +\
             f"wait={self.wait}, current_status={self.current_status}"
 
-            
+
 if __name__ == "__main__":
     n = 20
     y = 100
@@ -46,8 +46,8 @@ if __name__ == "__main__":
         SURFACE.fill((255, 255, 255))
         robotsBuf = robots
         for event in pg.event.get():
-            if event.type == pg.QUIT: play = False
-        
+            if event.type == pg.QUIT:
+                play = False
 
             # Пересчет скоростей
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
                     median = (right_neibor + left_neibor) / 2
                     robotsBuf[i].v = ((-robots[i].x + median) / 10, robots[i].v[1])
 
-            #Подсчет количества роботов в ряду
+            # Подсчет количества роботов в ряду
 
             k = 0
             l = 0
@@ -120,22 +120,25 @@ if __name__ == "__main__":
                 if left_down == -1:
                     if robots[i].current_status == 1:
                         left_down = i
+                elif robots[i].x < robots[left_down].x and robots[i].current_status == 1:
+                    left_down = i
                 if left_up == -1:
                     if robots[i].current_status == 0:
                         left_up = i
-            if math.fabs(robots[left_up].x < robots[left_down].x) > 0.07:
+                elif robots[i].x < robots[left_up].x and robots[i].current_status == 0:
+                    left_up = i
+            if math.fabs(robots[left_up].x - robots[left_down].x) > 0.07:
                 if robots[left_up].x < robots[left_down].x:
                     robots[left_up].current_status = 1
                     robots[left_up].v = (0, 0.1)
-                else:
+                if robots[left_up].x > robots[left_down].x:
                     robots[left_down].current_status = 0
                     robots[left_down].v = (0, -0.1)
-            pg.display.set_caption(f"down={left_down} up={left_up}")
+            pg.display.set_caption(f"down={robots[left_down].current_status} up={left_up}")
+            pg.time.wait(3000)
         elif a > 0:
             a -= 1
 
-        # ЭТА ЗАЛУПА НЕ РАБОТАЕТ, ПОТМОУ ЧТО НУЖНО ВЫБИРАТЬ НАИМЕНЬШЕГО ПО Х
-        
         # отрисовка
 
         for i in range(n):
