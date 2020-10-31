@@ -24,7 +24,7 @@ class Robot:
 
 
 if __name__ == "__main__":
-    n = 20
+    n = 100
     y = 100
     a = 0
     width = 1350
@@ -46,68 +46,64 @@ if __name__ == "__main__":
         SURFACE.fill((255, 255, 255))
         robotsBuf = robots
         for event in pg.event.get():
-            if event.type == pg.QUIT:
-                play = False
+            if event.type == pg.QUIT: play = False
 
-            # Пересчет скоростей
+        # Пересчет скоростей
 
-            for i in range(n):
-                robotsBuf[i].y = max(100, min(robots[i].y + robots[i].v[1], \
-                    130))
-                robotsBuf[i].x = robots[i].x + robots[i].v[0]
+        for i in range(n):
+            robotsBuf[i].y = max(100, min(robots[i].y + robots[i].v[1], \
+                130))
+            robotsBuf[i].x = robots[i].x + robots[i].v[0]
 
-            # Плотность верхних
+        # Плотность верхних
 
-            for i in range(n):
-                if robots[i].current_status == 0:
-                    j = 0
-                    left_neibor = 0
-                    left_i = i
-                    right_neibor = 1350
-                    right_i = i
-                    for j in range(n):
-                        if robots[j].current_status == 0 and i != j:
-                            if left_neibor <= robots[j].x and robots[j].x < robots[i].x:
-                                left_neibor = robots[j].x
-                                left_i = j
-                            if right_neibor >= robots[j].x and robots[j].x > robots[i].x:
-                                right_neibor = robots[j].x
-                                right_i = j
-                    median = (right_neibor + left_neibor) / 2
-                    robotsBuf[i].v = ((-robots[i].x + median) / 10, robots[i].v[1])
+        for i in range(n):
+            if robots[i].current_status == 0:
+                j = 0
+                left_neibor = 0
+                left_i = i
+                right_neibor = 1350
+                right_i = i
+                for j in range(n):
+                    if robots[j].current_status == 0 and i != j:
+                        if left_neibor <= robots[j].x and robots[j].x < robots[i].x:
+                            left_neibor = robots[j].x
+                            left_i = j
+                        if right_neibor >= robots[j].x and robots[j].x > robots[i].x:
+                            right_neibor = robots[j].x
+                            right_i = j
+                median = (right_neibor + left_neibor) / 2
+                robotsBuf[i].v = ((-robots[i].x + median) / 10, robots[i].v[1])
+        # Плотность нижних
 
-            # Плотность нижних
-
-            for i in range(n):
-                if robots[i].current_status == 1:
-                    j = 0
-                    left_neibor = 0
-                    left_i = i
-                    right_neibor = 1350
-                    right_i = i
-                    for j in range(n):
-                        if robots[j].current_status == 1 and i != j:
-                            if left_neibor <= robots[j].x and robots[j].x < robots[i].x:
-                                left_neibor = robots[j].x
-                                left_i = j
-                            if right_neibor >= robots[j].x and robots[j].x > robots[i].x:
-                                right_neibor = robots[j].x
-                                right_i = j
-                    median = (right_neibor + left_neibor) / 2
-                    robotsBuf[i].v = ((-robots[i].x + median) / 10, robots[i].v[1])
-
+        for i in range(n):
+            if robots[i].current_status == 1:
+                j = 0
+                left_neibor = 0
+                left_i = i
+                right_neibor = 1350
+                right_i = i
+                for j in range(n):
+                    if robots[j].current_status == 1 and i != j:
+                        if left_neibor <= robots[j].x and robots[j].x < robots[i].x:
+                            left_neibor = robots[j].x
+                            left_i = j
+                        if right_neibor >= robots[j].x and robots[j].x > robots[i].x:
+                            right_neibor = robots[j].x
+                            right_i = j
+                median = (right_neibor + left_neibor) / 2
+                robotsBuf[i].v = ((-robots[i].x + median) / 10, robots[i].v[1])
             # Подсчет количества роботов в ряду
-
-            k = 0
-            l = 0
-            for i in range(n):
-                if robots[i].current_status == 0:
-                    k += 1
-                else:
-                    l += 1
-                average_velocity += math.fabs(robots[i].v[0])
-            average_velocity /= n
-            pg.display.set_caption(f"k={k}, l={l}")
+        k = 0
+        l = 0
+        for i in range(n):
+            if robots[i].current_status == 0:
+                k += 1
+            else:
+                l += 1
+            average_velocity += math.fabs(robots[i].v[0])
+        average_velocity /= n
+        pg.display.set_caption(f"k={k}, l={l}")
 
 
         # Формирования равенства в рядах
