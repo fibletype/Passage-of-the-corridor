@@ -37,7 +37,7 @@ if __name__ == "__main__":
     SURFACE = pg.display.set_mode((1400, 500))
     '''print(*robotsBuf, sep="\n")'''
     for i in range(n):
-        robotsBuf[i].current_status = rnd.randint(0, 1)
+        robotsBuf[i].current_status = rnd.randint(0, 2) % 2
         if robotsBuf[i].current_status == 1:
             robotsBuf[i].v = (0, 0.4)
     average_velocity = 0
