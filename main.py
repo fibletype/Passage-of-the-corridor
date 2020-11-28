@@ -10,6 +10,9 @@ import math
 def dist(x, y, x1, y1):
     return ((x - x1)**2+(y - y1)**2)**0.5
 
+def sign(a):
+    return 1 if a > 0 else -1
+
 class Robot:
     def __init__(self, x: float, y: float):
         self.x = x
@@ -24,22 +27,32 @@ class Robot:
 
 
 if __name__ == "__main__":
-    n = 100
+    n = 30
     y = 100
     a = 0
     width = 1350
-    FPS = 10
+    UP = 100
+    DOWN = 130
+    FPS = 5
     BLUE = (0, 0, 255)
     GREEN = (0, 255, 0)
-    robotsBuf = [Robot(35 + (i + 1) * width / (n + 2), y) for i in range(n)]
+    robotsBuf = [Robot(35 + (i + 1) * width / (n + 2), rnd.randint(50, 200)) for i in range(n)]
     robots = robotsBuf
     pg.init()
     SURFACE = pg.display.set_mode((1400, 500))
     '''print(*robotsBuf, sep="\n")'''
     for i in range(n):
         robotsBuf[i].current_status = rnd.randint(0, 2) % 2
-        if robotsBuf[i].current_status == 1:
-            robotsBuf[i].v = (0, 0.4)
+        if robotsBuf[i].current_status == 0:
+            if robotsBuf[i].y < UP:
+                robotsBuf[i].v = (0, 0.2)
+            elif robotsBuf[i].y > UP:
+                robotsBuf[i].v = (0, -0.2)
+        else:
+            if robotsBuf[i].y < DOWN:
+                robotsBuf[i].v = (0, 0.2)
+            elif robotsBuf[i].y > DOWN:
+                robotsBuf[i].v = (0, -0.2)
     average_velocity = 0
     play = True
     while play:
@@ -48,11 +61,16 @@ if __name__ == "__main__":
         for event in pg.event.get():
             if event.type == pg.QUIT: play = False
 
-        # Пересчет скоростей
+        # Пересчет координат и скоростей
 
         for i in range(n):
-            robotsBuf[i].y = max(100, min(robots[i].y + robots[i].v[1], \
-                130))
+            robotsBuf[i].y = robots[i].y + robots[i].v[1]
+            if robotsBuf[i].current_status == 0:
+                if math.fabs(robotsBuf[i].y - UP) <= 0.2:
+                    robotsBuf[i].v = (robots[i].v[0], 0)
+            else:
+                if math.fabs(robotsBuf[i].y - DOWN) <= 0.2:
+                    robotsBuf[i].v = (robots[i].v[0], 0)
             robotsBuf[i].x = robots[i].x + robots[i].v[0]
 
         # Плотность верхних
